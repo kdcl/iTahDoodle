@@ -7,20 +7,34 @@
 //
 
 #import "BNRAppDelegate.h"
+  // Helper function to fetch the path to our to-do data stored on disk
+NSString *docPath()
+{
+  NSArray *pathList = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+  return [[pathList objectAtIndex:0] stringByAppendingPathComponent:@"data.td"];
+}
+
 
 @implementation BNRAppDelegate
 
 @synthesize window = _window;
 
+#pragma mark - application delegate callbackss
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    // Override point for customization after application launch.
-    self.window.backgroundColor = [UIColor whiteColor];
-    [self.window makeKeyAndVisible];
+    // Attempt to load an existing to-do dataset from an array stored to disk.
+  NSArray *plist = [NSArray arrayWithContentsOfFile:docPath()];
+  if (plist) {
+      // IF there was a dataset available, copy it into our instance variable. 
+    tasks = [plist mutableCopy];
+  }else{
+      // Otherwise, just create an empty one to get us started
+    tasks = [[NSMutableArray alloc]init ];
+  }
   
   
-  fuck
+  
     return YES;
 }
 

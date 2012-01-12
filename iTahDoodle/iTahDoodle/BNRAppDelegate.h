@@ -8,6 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
+  //Declare a helper function that we will use to get a path 
+  //to the location on disk where we can save the to-do list
+NSString *docPath(void);
+
 @interface BNRAppDelegate : UIResponder <UIApplicationDelegate>
 {
   UITableView *taskTable;
