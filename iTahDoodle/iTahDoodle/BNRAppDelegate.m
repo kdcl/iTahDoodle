@@ -61,7 +61,7 @@ NSString *docPath()
   [taskTable setDataSource:self];
   
     // Create and configure the text field where new tasks will be typed
-  taskField = [[UITextField alloc] initWithFrame:tableFrame];
+  taskField = [[UITextField alloc] initWithFrame:fieldFrame];
   [taskField setBorderStyle:UITextBorderStyleRoundedRect];
   [taskField setPlaceholder:@"Type a task ,tap Insert"];
   
