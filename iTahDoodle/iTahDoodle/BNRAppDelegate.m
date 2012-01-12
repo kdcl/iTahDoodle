@@ -36,8 +36,8 @@ NSString *docPath()
   if ([tasks count] == 0) {
       // Put some string in it
     [tasks addObject:@"Walk the dogs"];
-        [tasks addObject:@"Feed the hogs"];
-        [tasks addObject:@"Chop the logs"];
+    [tasks addObject:@"Feed the hogs"];
+    [tasks addObject:@"Chop the logs"];
     
   }
   
@@ -59,6 +59,11 @@ NSString *docPath()
   
     // Make this object the table view's dataSource
   [taskTable setDataSource:self];
+  
+    // Create and configure the text field where new tasks will be typed
+  taskField = [[UITextField alloc] initWithFrame:tableFrame];
+  [taskField setBorderStyle:UITextBorderStyleRoundedRect];
+  [taskField setPlaceholder:@"Type a task ,tap Insert"];
   
     // Create and configure a rounded rect Insert button
   insertButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
@@ -83,7 +88,7 @@ NSString *docPath()
     return YES;
 }
 
-#pragma make - Table View managment
+#pragma mark - Table View managment
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
@@ -116,6 +121,25 @@ NSString *docPath()
   return c;
 }
 
+- (void)addTask:(id)sender
+{
+    // Get the to-do item
+  NSString *t = [taskField text];
+  
+    // Quit here if tastField is empty
+  if ([t isEqualToString:@""]) {
+    return;
+  }
+    // Add it to our working array
+  [tasks addObject:t];
+    //Refresh the table so that the new item show op
+  [taskTable reloadData];
+    // And clear out the text field
+  [taskField setText:@""];
+    // Dismiss the keyboard
+  [taskField resignFirstResponder];
+}
+
 - (void)applicationWillResignActive:(UIApplication *)application
 {
   /*
@@ -126,10 +150,8 @@ NSString *docPath()
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
-  /*
-   Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
-   If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
-   */
+    // Save our tasks array to disk
+  [tasks writeToFile:docPath() atomically:YES ];
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
@@ -148,11 +170,7 @@ NSString *docPath()
 
 - (void)applicationWillTerminate:(UIApplication *)application
 {
-  /*
-   Called when the application is about to terminate.
-   Save data if appropriate.
-   See also applicationDidEnterBackground:.
-   */
+  [tasks writeToFile:docPath() atomically:YES];
 }
 
 @end
