@@ -12,7 +12,7 @@
   //to the location on disk where we can save the to-do list
 NSString *docPath(void);
 
-@interface BNRAppDelegate : UIResponder <UIApplicationDelegate>
+@interface BNRAppDelegate : UIResponder <UIApplicationDelegate,UITableViewDataSource>
 {
   UITableView *taskTable;
   UITextField *taskField;

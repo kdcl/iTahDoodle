@@ -32,6 +32,14 @@ NSString *docPath()
       // Otherwise, just create an empty one to get us started
     tasks = [[NSMutableArray alloc]init ];
   }
+    // Is tasks empty?
+  if ([tasks count] == 0) {
+      // Put some string in it
+    [tasks addObject:@"Walk the dogs"];
+        [tasks addObject:@"Feed the hogs"];
+        [tasks addObject:@"Chop the logs"];
+    
+  }
   
     // Create and configure the UIWindow instance 
     // A CGRect is a struct with an origin (x,y)and size (width ,height)
@@ -48,6 +56,9 @@ NSString *docPath()
     // Create and configure the table view 
   taskTable = [[UITableView alloc] initWithFrame:tableFrame style:UITableViewStylePlain];
   [taskTable setSeparatorStyle:UITableViewCellSeparatorStyleNone];
+  
+    // Make this object the table view's dataSource
+  [taskTable setDataSource:self];
   
     // Create and configure a rounded rect Insert button
   insertButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
@@ -69,11 +80,40 @@ NSString *docPath()
   [[self window] setBackgroundColor:[UIColor whiteColor]];
   [[self window] makeKeyAndVisible];
   
-  
-  
-  
-  
     return YES;
+}
+
+#pragma make - Table View managment
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    // Because this table view only has one section
+    // the number of rows in it is equal to the number
+    // of items in our tasks array
+  return [tasks count];
+}
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    // To improve performance, we reconfigure cells in memory
+    // that have scrolled off the screen and hand them back
+    // with new contents instead of always creating new cells
+    // First, we check to see if there's a cell available for reuse
+  UITableViewCell *c = [taskTable dequeueReusableCellWithIdentifier:@"Cell"];
+  
+  if (!c) {
+      // and ....only allocate a new cell if none are available 
+    c = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"Cell"];
+  }
+  
+    // Then we(re) configure the cell based on the model object, 
+    // in this case our TodoItem array
+  
+  NSString *item = [tasks objectAtIndex:[indexPath row]];
+  [[c textLabel] setText:item];
+  
+    // and Hand back to the table view the properly configured cell
+  
+  return c;
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application
